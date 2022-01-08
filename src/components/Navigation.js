@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Navigation = ({loggedIn}) =>{
+const Navigation = () =>{
 
   return(
     <nav className="nav-bar">
