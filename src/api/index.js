@@ -6,7 +6,7 @@ export const COHORT_NAME = '2110-FTB-PT-WEB-PT';
 export const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;
 
 
-// READ grab posts
+//GET /api/COHORT-NAME/posts
 export const fetchPosts = async () => {
   try {
     const response = await fetch(`${BASE_URL}/posts`);
@@ -44,7 +44,7 @@ export const register = async (username, password) => {
 
 //api call to log user in
 export const login = async (username, password) => {
-  try{
+  try {
     const resp = await fetch(`${BASE_URL}/users/login`, {
       method: "POST",
       headers: {
@@ -59,7 +59,33 @@ export const login = async (username, password) => {
     })
     const data = resp.json();
     return data;
-  } catch(error){
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+// POST /api/COHORT-NAME/posts
+export const addPost = async (postObject, token) => {
+  const {title, description, price, willDeliver} = postObject;
+  try {
+    const resp = await fetch(`${BASE_URL}/posts`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        post: {
+          title,
+          description,
+          price,
+          willDeliver
+        }
+      })
+    })
+    const newPost = resp.json();
+    return newPost;
+} catch (error) {
     console.error(error)
   }
 }
