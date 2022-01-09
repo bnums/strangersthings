@@ -66,7 +66,7 @@ export const login = async (username, password) => {
 
 // POST /api/COHORT-NAME/posts
 export const addPost = async (postObject, token) => {
-  const {title, description, price, willDeliver} = postObject;
+  const { title, description, price, willDeliver } = postObject;
   try {
     const resp = await fetch(`${BASE_URL}/posts`, {
       method: "POST",
@@ -84,8 +84,29 @@ export const addPost = async (postObject, token) => {
       })
     })
     const newPost = resp.json();
+    console.log(newPost)
+
     return newPost;
-} catch (error) {
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+// DELETE /api/COHORT-NAME/posts/POST_ID
+export const deletePost = async (token, id) => {
+  try {
+    const resp = await fetch(`${BASE_URL}/posts/${id}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    const {success} = resp.json();
+    if(success){
+      console.log("Message has been deleted")
+    }
+  } catch (error) { 
     console.error(error)
   }
 }

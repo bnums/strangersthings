@@ -15,14 +15,20 @@ const Login = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data, error, success } = await login(username, password);
-    if (!success) {
-      setMessage(error.message)
-    } else {
-      setMessage(data.message)
-      setToken(data.token)
+    try{
+      const { data, error, success } = await login(username, password);
+      if (!success) {
+        setMessage(error.message)
+      } else {
+        setMessage(data.message)
+        setToken(data.token)
+      }
+    }catch(error){
+      throw(error);
     }
-    setStatus(true)
+    finally{
+      setStatus(true);
+    }
   }
 
 
@@ -30,8 +36,8 @@ const Login = ({
     <div>
       <form className="login-form" onSubmit={handleSubmit}>
         <h3>Login</h3>
-        <input value={username} onChange={(event) => { setUsername(event.target.value) }} />
-        <input value={password} onChange={(event) => { setPassword(event.target.value) }} />
+        <input value={username} placeholder="username" onChange={(event) => { setUsername(event.target.value) }} />
+        <input value={password} placeholder="password" onChange={(event) => { setPassword(event.target.value) }} />
         <button>submit</button>
       </form>
       {status ? <h3>{message}</h3> : ""}
