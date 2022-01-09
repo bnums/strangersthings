@@ -4,8 +4,8 @@ import { register } from "../api";
 
 const Register = () => {
 
-  const [username, setUsername] = useState("username");
-  const [password, setPassword] = useState("password");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [status, setStatus] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -26,8 +26,8 @@ const Register = () => {
     <div>
       <form className="register-form" onSubmit={handleSubmit}>
         <h3>Register Here</h3>
-        <input value={username} onChange={(event) => { setUsername(event.target.value) }} />
-        <input value={password} onChange={(event) => { setPassword(event.target.value) }} />
+        <input value={username} placeholder="username" onChange={(event) => { setUsername(event.target.value) }} />
+        <input value={password} placeholder="password" onChange={(event) => { setPassword(event.target.value) }} />
         <button type="submit">Submit</button>
       </form>
       {status ? <h3>{message}</h3> : ""}
