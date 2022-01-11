@@ -20,7 +20,7 @@ const Login = ({
       if (!success) {
         setMessage(error.message)
       } else {
-        setMessage(data.message)
+        setMessage(`Welcome ${username}, thank you for logging in!`)
         setToken(data.token)
       }
     }catch(error){

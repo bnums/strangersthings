@@ -1,0 +1,19 @@
+useEffect(){
+  if(localStorage.getItem('token')){
+    setToken(localStorage.getItem('token)) //when user logged in set localstorage token so user will be logged in
+  }
+}
+
+to logout localStorage.removItem('token');
+
+
+Delete api call 
+
+check to see if isAuthor is true or false 
+if user is author of post, render out edit and delete buttons 
+
+const handleDelete = async () =>{
+  await fetch
+}
+
+filter(element => !==  vacation.)

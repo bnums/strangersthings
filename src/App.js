@@ -1,39 +1,47 @@
 import './App.css';
-import {Routes, Route} from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import { useEffect, useState } from 'react';
 
 
 // React components
-import { 
-  Posts, 
+import {
+  Posts,
   Login,
   Register,
   Navigation,
-  MakePost
+  MakePost,
+  AccountForm
   // Profile
-
 } from './components';
 
 
 function App() {
-  const [posts,setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [token, setToken] = useState('');
-  const [username,setUsername] = useState('');
+  const [user, setUser] = useState('');
+
+  const handleLogout = () => {
+    console.log("loggin out")
+  }
 
 
-// useEffect(() =>{
-// console.log(token)
-// },[token])
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      setToken(localStorage.getItem('token')) //when user logged in set localstorage token so user will be logged in
+    }
+  }, [])
 
 
-  return(
+  return (
     <div className="App">
-      <Navigation />
+      <Navigation token={token} />
+      {token && <h2> Welcome {user}! </h2>}
       <Routes>
-        <Route path='/' element={<Posts posts={posts} setPosts={setPosts} token={token}/>}/>
-        <Route path='/login-page' element={<Login username={username} setUsername={setUsername} token={token} setToken={setToken}/>}/>
-        <Route path='/register-page' element={<Register />}/>
-        <Route path='/make-post' element={<MakePost token={token} />}/>
+        <Route exact path='/' element={<Posts posts={posts} setPosts={setPosts} token={token} />} />
+        {/* <Route path='/login-page' element={<Login username={user} setUsername={setUser} token={token} setToken={setToken} />} />
+        <Route path='/register-page' element={<Register />} /> */}
+        <Route exact path='/make-post' element={<MakePost token={token} />} />
+        <Route exact path='/account/:method' element={<AccountForm setUser={setUser} setToken={setToken}/>}/>
       </Routes>
     </div>
   );

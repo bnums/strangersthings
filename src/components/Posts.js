@@ -26,7 +26,7 @@ const Posts = (props) => {
 
   return (
     <section className="posts">
-      <MakePost handlePosts={handlePosts} token={token}/>
+      {token? <MakePost handlePosts={handlePosts} token={token}/> : ""}
       {posts.length > 0 &&
         posts.map(({ _id, title, description, author: { username }, price, location, willDeliver }) => {
           return (
