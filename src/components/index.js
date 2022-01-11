@@ -3,3 +3,4 @@ export {default as Register} from './Register';
 export {default as Navigation} from './Navigation';
 export {default as Login} from './Login';
 export {default as MakePost} from './MakePost';
+export {default as AccountForm} from './AccountForm'
