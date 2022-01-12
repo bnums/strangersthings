@@ -1,44 +1,22 @@
 
-import React, { useEffect } from "react";
+import React from "react";
 import { MakePost } from ".";
-import { fetchPosts, deletePost } from "../api";
+import { callApi } from "../api";
+import { PostSingle } from ".";
 
 
-const Posts = (props) => {
-  const { posts, setPosts, token } = props;
-
-  const handlePosts = async () => {
-    try {
-      const getPosts = await fetchPosts();
-      console.log(getPosts)
-      setPosts(getPosts);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-
-  useEffect(() => {
-    handlePosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+const Posts = ({ posts, setPosts, fetchPosts, token, user }) => {
 
   return (
     <section className="posts">
-      {token? <MakePost handlePosts={handlePosts} token={token}/> : ""}
-      {posts.length > 0 &&
-        posts.map(({ _id, title, description, author: { username }, price, location, willDeliver }) => {
+      {token && <MakePost fetchPosts={fetchPosts} token={token} />}
+      {posts && posts.length > 0 ?
+        posts.map((post) => {
           return (
-            <div className="post" key={_id}>
-              <h2>{title}</h2>
-              <div>Description: {description}</div>
-              <div>Price: {price}</div>
-              <div>Posted by: {username}</div>
-              {willDeliver ? <div>Will deliver</div> : <div>Will not deliver</div>}
-            </div>
-          )
+            <PostSingle key={post._id} post={post}></PostSingle>
+          );
         })
+        : <h5>No posts to display</h5>
       }
     </section>
   )

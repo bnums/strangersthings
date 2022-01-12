@@ -47,6 +47,7 @@ const AccountForm = ({ setUser, setToken }) => {
           setUser(user);
           navigate('/');
           localStorage.setItem('token', token);
+          localStorage.setItem('user', user);
         }
       }
     } catch (error) {

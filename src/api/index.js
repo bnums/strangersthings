@@ -7,62 +7,28 @@ export const COHORT_NAME = '2110-FTB-PT-WEB-PT';
 export const BASE_URL = `https://strangers-things.herokuapp.com/api/${COHORT_NAME}`;
 
 
-//GET /api/COHORT-NAME/posts
-export const fetchPosts = async () => {
-  try {
-    const response = await fetch(`${BASE_URL}/posts`);
-    const { data: { posts } } = await response.json();
-    return posts;
+//MODULAR API CALL FUNCTION
 
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// api call to create a new user account
-export const register = async (username, password) => {
-  try {
-    const response = await fetch(`${BASE_URL}/users/register`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
+export const callApi = async ({url,method,token,body}) =>{
+  try{
+    const options = {
+      method: method ? method.toUpperCase() : "GET" ,
+      headers:{
+        'Content-Type':'application/json',
       },
-      body: JSON.stringify({
-        user: {
-          username,
-          password,
-        }
-      })
-    })
+      body:JSON.stringify(body)
+    }
+    if(token){
+      options.headers['Authorization'] = `Bearer ${token}`
+    }
+    const response = await fetch(BASE_URL + url,options);
     const data = await response.json();
     return data;
-
-  } catch (error) {
-    console.error(error);
   }
-}
-
-//api call to log user in
-export const login = async (username, password) => {
-  try {
-    const resp = await fetch(`${BASE_URL}/users/login`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: {
-          username,
-          password,
-        }
-      })
-    })
-    const data = resp.json();
-    return data;
-  } catch (error) {
-    console.error(error)
+    catch(error){
+      console.error(error)
+    }
   }
-}
 
 // GET /api/COHORT-NAME/users/me
 export const getUser = async (token) =>{
@@ -81,7 +47,6 @@ export const getUser = async (token) =>{
     console.error(error);
   }
 }
-
 
 // POST /api/COHORT-NAME/posts 
 // api call to add post

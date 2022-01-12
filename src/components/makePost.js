@@ -2,7 +2,7 @@ import { useState } from "react";
 import { addPost} from "../api";
 
 
-const MakePost = ({ token, handlePosts }) => {
+const MakePost = ({ token, fetchPosts }) => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -11,15 +11,11 @@ const MakePost = ({ token, handlePosts }) => {
   const [willDeliver, setWillDeliver] = useState(false);
   const [message,setMessage] = useState("")
 
-  let newPost = { title, description, price, location, willDeliver };
+  const newPost = { title, description, price, location, willDeliver };
  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!token){
-      setMessage("You must be logged in to make a post")
-      return;
-    }
     try {
       const post = await addPost(newPost, token);
       console.log("This is my postObject from makePost", post)
@@ -31,7 +27,7 @@ const MakePost = ({ token, handlePosts }) => {
     } catch (error) {
       console.error(error)
     } finally{
-      await handlePosts();
+      await fetchPosts();
     }
   }
 
