@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
-import { login, register } from "../api"
+import { callApi } from "../api"
 
 
-const AccountForm = (setUser, setToken) => {
+const AccountForm = ({ setUser, setToken }) => {
   const params = useParams();
   let { method } = params;
   const title = method === 'login' ? 'Log In' : 'Register'
@@ -16,20 +16,37 @@ const AccountForm = (setUser, setToken) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (method === 'login') {
-        const { data, error, success } = await login(username, password);
-        if (!success) {
-          setMessage(error.message)
-        } else {
-          setMessage(`Welcome ${username}, thank you for logging in!`);
-          setToken(data.token);
+      const dataObj = await callApi({
+        url: `/users/${method}`,
+        method: 'POST',
+        body: {
+          user: {
+            username,
+            password
+          }
         }
-      } else {
-        const { success } = await register(username, password);
-        if (!success) {
-          setMessage("User already exists! Please login or use a different username instead.");
-        } else {
-          setMessage("You have successfully registered! Please login to start posting!")
+      });
+
+      if(dataObj.error){
+        setMessage(dataObj.error.message);
+      }
+
+      const token = dataObj.data.token;
+
+      if (token) {
+        const dataObj = await callApi({
+          url: `/users/me`,
+          method: 'GET',
+          token
+        });
+        const user = dataObj.data.username;
+        if (user) {
+          setUsername('');
+          setPassword('');
+          setToken(token);
+          setUser(user);
+          navigate('/');
+          localStorage.setItem('token', token);
         }
       }
     } catch (error) {
@@ -54,7 +71,8 @@ const AccountForm = (setUser, setToken) => {
           value={password}
           onChange={(e) => { setPassword(e.target.value) }}
         />
-        <button type="submit">
+        <button
+          type="submit">
           {title}
         </button>
         <div>
