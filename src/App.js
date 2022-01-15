@@ -8,8 +8,9 @@ import { callApi } from './api';
 import {
   Posts,
   Navigation,
-  AccountForm
-  // Profile
+  AccountForm,
+  Profile,
+  Home
 } from './components';
 
 
@@ -18,8 +19,9 @@ function App() {
   const [token, setToken] = useState('');
   const [user, setUser] = useState('');
 
+
   const fetchPosts = async () => {
-    const { data: { posts } } = await callApi({ url: '/posts' }, token)
+    const { data: { posts } } = await callApi({ url: '/posts' , token})
     if (posts) {
       setPosts(posts);
     }
@@ -58,8 +60,10 @@ function App() {
         </>
       }
       <Routes>
-        <Route exact path='/' element={<Posts setPosts={setPosts} posts={posts} fetchPosts={fetchPosts} token={token} user={user} />} />
         <Route exact path='/account/:method' element={<AccountForm setUser={setUser} setToken={setToken} />} />
+        <Route exact path='/'element={<Home />}/>
+        <Route exact path='/posts' element={<Posts setPosts={setPosts} posts={posts} fetchPosts={fetchPosts} token={token} user={user} />}/>
+        <Route exact path='/profile' element={<Profile user={user} token={token} posts={posts} setPosts={setPosts} />}/>
       </Routes>
     </div >
   );

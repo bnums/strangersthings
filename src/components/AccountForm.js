@@ -55,7 +55,6 @@ const AccountForm = ({ setUser, setToken }) => {
     }
   }
 
-
   return (
     <div>
       <h2>{title}</h2>

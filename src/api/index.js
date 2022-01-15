@@ -23,6 +23,7 @@ export const callApi = async ({url,method,token,body}) =>{
     }
     const response = await fetch(BASE_URL + url,options);
     const data = await response.json();
+    console.log('Data Obj: ', data)
     return data;
   }
     catch(error){
@@ -32,7 +33,6 @@ export const callApi = async ({url,method,token,body}) =>{
 
 // GET /api/COHORT-NAME/users/me
 export const getUser = async (token) =>{
-
   try{
     const resp = await fetch(`${BASE_URL}users/me`, {
       headers: {
