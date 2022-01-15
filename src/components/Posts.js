@@ -1,7 +1,6 @@
 
-import React, { useEffect } from "react";
+import React from "react";
 import { AddPost } from ".";
-import { PostForm } from ".";
 import { PostSingle } from ".";
 import { callApi } from "../api";
 

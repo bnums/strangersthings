@@ -63,7 +63,7 @@ function App() {
         <Route exact path='/account/:method' element={<AccountForm setUser={setUser} setToken={setToken} />} />
         <Route exact path='/'element={<Home />}/>
         <Route exact path='/posts' element={<Posts setPosts={setPosts} posts={posts} fetchPosts={fetchPosts} token={token} user={user} />}/>
-        <Route exact path='/profile' element={<Profile user={user} />}/>
+        <Route exact path='/profile' element={<Profile user={user} token={token} posts={posts} setPosts={setPosts} />}/>
       </Routes>
     </div >
   );
