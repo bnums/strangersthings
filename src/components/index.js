@@ -5,3 +5,4 @@ export {default as PostSingle} from './PostSingle';
 export {default as Profile} from './Profile';
 export {default as AddPost} from './AddPost'
 export {default as Home} from './Home'
+export {default as MessageForm} from './MessageForm'

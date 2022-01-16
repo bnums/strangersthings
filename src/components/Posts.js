@@ -1,21 +1,12 @@
-
 import React from "react";
 import { AddPost } from ".";
 import { PostSingle } from ".";
-import { callApi } from "../api";
+import { useNavigate, useParams } from "react-router-dom";
 
-
-const Posts = ({ posts, setPosts, fetchPosts, token, user }) => {
-
-  const handleDelete = async (id) => {
-    try {
-      await callApi({ url: `/posts/${id}`, method:'DELETE', token })
-      const newPosts = posts.filter(element => element._id !== id);
-      setPosts(newPosts);
-    } catch (error) {
-      console.error(error)
-    }
-  }
+const Posts = ({ posts, setPosts, fetchPosts, token, user, deletePost }) => {
+  const navigate = useNavigate();
+  const params = useParams();
+  let {postId} = params;
 
   return (
     <section className="posts">
@@ -23,9 +14,11 @@ const Posts = ({ posts, setPosts, fetchPosts, token, user }) => {
       {
         posts && posts.length
           ? posts.map(post => {
+            postId = post._id
             return (
               <PostSingle key={post._id} post={post}>
-                {post.isAuthor && <button onClick={() => handleDelete(post._id)}>Delete</button>}
+                {post.isAuthor && <button onClick={() => deletePost(post._id)}>Delete</button> } 
+                {!post.isAuthor && <button onClick={navigate(`/posts/${postId}/messages`)}>Message</button>}
               </PostSingle>
             );
           })

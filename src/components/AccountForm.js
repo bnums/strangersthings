@@ -3,15 +3,13 @@ import { useNavigate, Link, useParams } from 'react-router-dom';
 import { callApi } from "../api"
 
 
-const AccountForm = ({ setUser, setToken }) => {
+const AccountForm = ({ setUser, setToken, setMessages }) => {
   const params = useParams();
   let { method } = params;
   const title = method === 'login' ? 'Log In' : 'Register'
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,10 +24,6 @@ const AccountForm = ({ setUser, setToken }) => {
           }
         }
       });
-
-      if(dataObj.error){
-        setMessage(dataObj.error.message);
-      }
 
       const token = dataObj.data.token;
 
@@ -46,6 +40,7 @@ const AccountForm = ({ setUser, setToken }) => {
           setToken(token);
           setUser(user);
           navigate('/');
+          setMessages(dataObj.messages);
           localStorage.setItem('token', token);
           localStorage.setItem('user', user);
         }
@@ -83,7 +78,7 @@ const AccountForm = ({ setUser, setToken }) => {
           }
         </div>
       </form>
-      {message.length > 0 && <h3>{message}</h3>}
+      {/* {message.length > 0 && <h3>{message}</h3>} */}
     </div>
   )
 }

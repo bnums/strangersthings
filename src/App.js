@@ -10,7 +10,8 @@ import {
   Navigation,
   AccountForm,
   Profile,
-  Home
+  Home,
+  MessageForm
 } from './components';
 
 
@@ -18,12 +19,23 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [token, setToken] = useState('');
   const [user, setUser] = useState('');
+  const [messages, setMessages] = useState([]);
 
 
   const fetchPosts = async () => {
     const { data: { posts } } = await callApi({ url: '/posts' , token})
     if (posts) {
       setPosts(posts);
+    }
+  }
+
+  const deletePost = async (id) => {
+    try {
+      await callApi({ url: `/posts/${id}`, method: 'DELETE', token })
+      const newPosts = posts.filter(element => element._id !== id);
+      setPosts(newPosts);
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -60,10 +72,12 @@ function App() {
         </>
       }
       <Routes>
-        <Route exact path='/account/:method' element={<AccountForm setUser={setUser} setToken={setToken} />} />
+        <Route exact path='/account/:method' 
+        element={<AccountForm setUser={setUser} setToken={setToken} />} />
         <Route exact path='/'element={<Home />}/>
-        <Route exact path='/posts' element={<Posts setPosts={setPosts} posts={posts} fetchPosts={fetchPosts} token={token} user={user} />}/>
-        <Route exact path='/profile' element={<Profile user={user} token={token} posts={posts} setPosts={setPosts} />}/>
+        <Route exact path='/posts' element={<Posts setPosts={setPosts} posts={posts} fetchPosts={fetchPosts} token={token} user={user} deletePost={deletePost} />}/>
+        <Route exact path='/profile' element={<Profile user={user} token={token} posts={posts} setPosts={setPosts}messages={messages} setMessages={setMessages} deletePost={deletePost}/>}/>
+        <Route exact path='/posts/:postId/messages' element={<MessageForm />}/>
       </Routes>
     </div >
   );
