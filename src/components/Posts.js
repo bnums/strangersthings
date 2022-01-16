@@ -1,12 +1,7 @@
 import React from "react";
-import { AddPost } from ".";
-import { PostSingle } from ".";
-import { useNavigate, useParams } from "react-router-dom";
+import { AddPost, PostSingle } from ".";
 
 const Posts = ({ posts, setPosts, fetchPosts, token, user, deletePost }) => {
-  const navigate = useNavigate();
-  const params = useParams();
-  let {postId} = params;
 
   return (
     <section className="posts">
@@ -14,12 +9,8 @@ const Posts = ({ posts, setPosts, fetchPosts, token, user, deletePost }) => {
       {
         posts && posts.length
           ? posts.map(post => {
-            postId = post._id
             return (
-              <PostSingle key={post._id} post={post}>
-                {post.isAuthor && <button onClick={() => deletePost(post._id)}>Delete</button> } 
-                {!post.isAuthor && <button onClick={navigate(`/posts/${postId}/messages`)}>Message</button>}
-              </PostSingle>
+              <PostSingle key={post._id} post={post} deletePost={deletePost}></PostSingle>
             );
           })
           : <h5>No posts to display</h5>

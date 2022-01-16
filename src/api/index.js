@@ -130,7 +130,7 @@ export const deletePost = async (token, id) => {
 
 //POST /api/COHORT-NAME/posts/POST_ID/messages
 // api call to send message to user of a post
-export const sendMessage = async (content, token, postId) =>{
+export const sendMessage = async ({content, token, postId}) =>{
   try{
     const resp = await fetch(`${BASE_URL}/posts/${postId}/messages`, {
       method: "POST",

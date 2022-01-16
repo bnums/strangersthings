@@ -77,7 +77,7 @@ function App() {
         <Route exact path='/'element={<Home />}/>
         <Route exact path='/posts' element={<Posts setPosts={setPosts} posts={posts} fetchPosts={fetchPosts} token={token} user={user} deletePost={deletePost} />}/>
         <Route exact path='/profile' element={<Profile user={user} token={token} posts={posts} setPosts={setPosts}messages={messages} setMessages={setMessages} deletePost={deletePost}/>}/>
-        <Route exact path='/posts/:postId/messages' element={<MessageForm />}/>
+        <Route exact path='/posts/:postId/messages' element={<MessageForm token={token} setPosts={setPosts} />}/>
       </Routes>
     </div >
   );
