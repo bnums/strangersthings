@@ -50,6 +50,7 @@ function App() {
   useEffect(() => {
     try {
       fetchPosts();
+      localStorage.clear();
     } catch (error) {
       console.error(error);
     }

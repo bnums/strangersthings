@@ -3,7 +3,7 @@ import PostForm from "./PostForm";
 import { callApi } from "../api";
 
 
-const AddPost = ({ token, fetchPosts, posts, setPosts }) => {
+const AddPost = ({ token, posts, setPosts }) => {
   const blankPost = { title: '', description: '', price: '', location: '', willDeliver: false }
   const [post, setPost] = useState(blankPost);
 

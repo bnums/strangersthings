@@ -43,7 +43,6 @@ const AccountForm = ({ setUser, setToken, setMessages }) => {
         const user = dataObj.data.username;
         const messages = dataObj.data.messages;
        
-    
         if (user) {
           setUsername('');
           setPassword('');
