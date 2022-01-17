@@ -1,21 +1,7 @@
-
 import React from "react";
-import { AddPost } from ".";
-import { PostSingle } from ".";
-import { callApi } from "../api";
+import { AddPost, PostSingle } from ".";
 
-
-const Posts = ({ posts, setPosts, fetchPosts, token, user }) => {
-
-  const handleDelete = async (id) => {
-    try {
-      await callApi({ url: `/posts/${id}`, method:'DELETE', token })
-      const newPosts = posts.filter(element => element._id !== id);
-      setPosts(newPosts);
-    } catch (error) {
-      console.error(error)
-    }
-  }
+const Posts = ({ posts, setPosts, fetchPosts, token,deletePost }) => {
 
   return (
     <section className="posts">
@@ -24,9 +10,7 @@ const Posts = ({ posts, setPosts, fetchPosts, token, user }) => {
         posts && posts.length
           ? posts.map(post => {
             return (
-              <PostSingle key={post._id} post={post}>
-                {post.isAuthor && <button onClick={() => handleDelete(post._id)}>Delete</button>}
-              </PostSingle>
+              <PostSingle key={post._id} post={post} deletePost={deletePost}></PostSingle>
             );
           })
           : <h5>No posts to display</h5>

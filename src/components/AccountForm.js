@@ -1,22 +1,21 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { callApi } from "../api"
 
 
-const AccountForm = ({ setUser, setToken }) => {
+const AccountForm = ({ setUser, setToken, setMessages }) => {
   const params = useParams();
   let { method } = params;
   const title = method === 'login' ? 'Log In' : 'Register'
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const dataObj = await callApi({
+      const {success, error, data} = await callApi({
         url: `/users/${method}`,
         method: 'POST',
         body: {
@@ -27,11 +26,12 @@ const AccountForm = ({ setUser, setToken }) => {
         }
       });
 
-      if(dataObj.error){
-        setMessage(dataObj.error.message);
+      if(!success){
+        setError(error.message);
       }
-
-      const token = dataObj.data.token;
+      
+      
+      const token = data.token;
 
       if (token) {
         const dataObj = await callApi({
@@ -39,13 +39,19 @@ const AccountForm = ({ setUser, setToken }) => {
           method: 'GET',
           token
         });
+       
         const user = dataObj.data.username;
+        const messages = dataObj.data.messages;
+       
+    
         if (user) {
           setUsername('');
           setPassword('');
           setToken(token);
           setUser(user);
-          navigate('/');
+          setMessages(messages);
+          setError('');
+          navigate(`/profile/${user}`)
           localStorage.setItem('token', token);
           localStorage.setItem('user', user);
         }
@@ -55,7 +61,7 @@ const AccountForm = ({ setUser, setToken }) => {
     }
   }
 
-  return (
+  return <>
     <div>
       <h2>{title}</h2>
       <form className="account-form" onSubmit={handleSubmit}>
@@ -83,9 +89,10 @@ const AccountForm = ({ setUser, setToken }) => {
           }
         </div>
       </form>
-      {message.length > 0 && <h3>{message}</h3>}
+      <br/>
+      {error ? <div>{error}</div> : ""}
     </div>
-  )
+  </>
 }
 
 export default AccountForm;
