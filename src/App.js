@@ -11,19 +11,20 @@ import {
   AccountForm,
   Profile,
   Home,
-  MessageForm
+  MessageForm,
+  EditForm,
 } from './components';
 
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [token, setToken] = useState('');
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState('guest');
   const [messages, setMessages] = useState([]);
 
 
   const fetchPosts = async () => {
-    const { data: { posts } } = await callApi({ url: '/posts' , token})
+    const { data: { posts } } = await callApi({ url: '/posts', token })
     if (posts) {
       setPosts(posts);
     }
@@ -58,26 +59,27 @@ function App() {
 
   return (
     <div className="App">
-      <Navigation />
+      <Navigation user={user}/>
       {token &&
         <>
           <h2> Welcome {user}! </h2>
           <button
             onClick={() => {
               setToken('');
-              setUser('');
+              setUser('guest');
+              setMessages('');
               localStorage.clear();
             }
             }>Log Out</button>
         </>
       }
       <Routes>
-        <Route exact path='/account/:method' 
-        element={<AccountForm setUser={setUser} setToken={setToken} />} />
-        <Route exact path='/'element={<Home />}/>
-        <Route exact path='/posts' element={<Posts setPosts={setPosts} posts={posts} fetchPosts={fetchPosts} token={token} user={user} deletePost={deletePost} />}/>
-        <Route exact path='/profile' element={<Profile user={user} token={token} posts={posts} setPosts={setPosts}messages={messages} setMessages={setMessages} deletePost={deletePost}/>}/>
-        <Route exact path='/posts/:postId/messages' element={<MessageForm token={token} setPosts={setPosts} />}/>
+        <Route exact path='/account/:method' element={<AccountForm setUser={setUser} setToken={setToken} setMessages={setMessages} />} />
+        <Route exact path='/' element={<Home />} />
+        <Route exact path='/posts' element={<Posts setPosts={setPosts} posts={posts} fetchPosts={fetchPosts} token={token} user={user} deletePost={deletePost} />} />
+        <Route path='/profile/:user' element={<Profile token={token} posts={posts} setPosts={setPosts} messages={messages} setMessages={setMessages} deletePost={deletePost} user={user}/>} />
+        <Route exact path='/posts/:postId/messages' element={<MessageForm token={token} setPosts={setPosts} fetchPosts={fetchPosts} posts={posts} />} />
+        <Route path='/posts/:postId/edit' element={<EditForm posts={posts} setPosts={setPosts} token={token} fetchPosts={fetchPosts}/>} />
       </Routes>
     </div >
   );

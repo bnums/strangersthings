@@ -1,7 +1,7 @@
 import React from "react";
 import { AddPost, PostSingle } from ".";
 
-const Posts = ({ posts, setPosts, fetchPosts, token, user, deletePost }) => {
+const Posts = ({ posts, setPosts, fetchPosts, token,deletePost }) => {
 
   return (
     <section className="posts">

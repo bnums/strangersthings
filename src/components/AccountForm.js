@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { callApi } from "../api"
 
@@ -10,11 +10,12 @@ const AccountForm = ({ setUser, setToken, setMessages }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const dataObj = await callApi({
+      const {success, error, data} = await callApi({
         url: `/users/${method}`,
         method: 'POST',
         body: {
@@ -25,7 +26,12 @@ const AccountForm = ({ setUser, setToken, setMessages }) => {
         }
       });
 
-      const token = dataObj.data.token;
+      if(!success){
+        setError(error.message);
+      }
+      
+      
+      const token = data.token;
 
       if (token) {
         const dataObj = await callApi({
@@ -33,14 +39,19 @@ const AccountForm = ({ setUser, setToken, setMessages }) => {
           method: 'GET',
           token
         });
+       
         const user = dataObj.data.username;
+        const messages = dataObj.data.messages;
+       
+    
         if (user) {
           setUsername('');
           setPassword('');
           setToken(token);
           setUser(user);
-          navigate('/');
-          setMessages(dataObj.messages);
+          setMessages(messages);
+          setError('');
+          navigate(`/profile/${user}`)
           localStorage.setItem('token', token);
           localStorage.setItem('user', user);
         }
@@ -50,7 +61,7 @@ const AccountForm = ({ setUser, setToken, setMessages }) => {
     }
   }
 
-  return (
+  return <>
     <div>
       <h2>{title}</h2>
       <form className="account-form" onSubmit={handleSubmit}>
@@ -78,9 +89,10 @@ const AccountForm = ({ setUser, setToken, setMessages }) => {
           }
         </div>
       </form>
-      {/* {message.length > 0 && <h3>{message}</h3>} */}
+      <br/>
+      {error ? <div>{error}</div> : ""}
     </div>
-  )
+  </>
 }
 
 export default AccountForm;
